@@ -5,19 +5,24 @@ import {
   timestamp,
   boolean,
 } from "drizzle-orm/pg-core";
+import { roles } from "./roles";
 
 import { companies } from "./companies";
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
 
-  companyId: uuid("company_id")
-    .notNull()
-    .references(() => companies.id),
+companyId: uuid("company_id")
+  .notNull()
+  .references(() => companies.id),
 
-  email: varchar("email", { length: 255 })
-    .notNull()
-    .unique(),
+roleId: uuid("role_id")
+  .notNull()
+  .references(() => roles.id),
+
+email: varchar("email", { length: 255 })
+  .notNull()
+  .unique(),
 
   passwordHash: varchar("password_hash", { length: 255 }).notNull(),
 

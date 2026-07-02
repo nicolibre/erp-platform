@@ -36,6 +36,7 @@ export class UsersService {
       .insert(users)
       .values({
         companyId: createUserDto.companyId,
+        roleId: createUserDto.roleId,
         email: createUserDto.email,
         passwordHash,
         firstName: createUserDto.firstName,

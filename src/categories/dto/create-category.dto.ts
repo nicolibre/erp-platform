@@ -1,34 +1,27 @@
 import {
-  IsEmail,
   IsNotEmpty,
   IsOptional,
   IsString,
-  MinLength,
   IsUUID,
+  MaxLength,
 } from "class-validator";
 
-export class CreateUserDto {
+export class CreateCategoryDto {
   @IsUUID()
   companyId: string;
 
-  @IsUUID()
-  roleId: string;
-
-  @IsEmail()
-  email: string;
-
-  @MinLength(8)
-  password: string;
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(20)
+  code: string;
 
   @IsString()
   @IsNotEmpty()
-  firstName: string;
-
-  @IsString()
-  @IsNotEmpty()
-  lastName: string;
+  @MaxLength(100)
+  name: string;
 
   @IsOptional()
   @IsString()
-  phone?: string;
+  @MaxLength(255)
+  description?: string;
 }
