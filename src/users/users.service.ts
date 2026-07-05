@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
-import { Inject, Injectable, ConflictException } from "@nestjs/common";
+import { Injectable, ConflictException } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
 
-import { db } from "../database/database";
+import { DatabaseService } from "../database/database.service";
 import { users } from "../database/schema";
 
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -10,12 +10,11 @@ import { CreateUserDto } from "./dto/create-user.dto";
 @Injectable()
 export class UsersService {
   constructor(
-    @Inject("DATABASE")
-    private readonly database: typeof db,
-  ) {}
+  private readonly database: DatabaseService,
+) {}
 
   async findByEmail(email: string) {
-    const result = await this.database
+    const result = await this.database.client
       .select()
       .from(users)
       .where(eq(users.email, email));
@@ -32,7 +31,7 @@ export class UsersService {
 
     const passwordHash = await bcrypt.hash(createUserDto.password, 10);
 
-    const result = await this.database
+    const result = await this.database.client
       .insert(users)
       .values({
         companyId: createUserDto.companyId,

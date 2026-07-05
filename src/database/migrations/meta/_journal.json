@@ -15,6 +15,13 @@
       "when": 1782830477546,
       "tag": "0001_narrow_deathbird",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783037267250,
+      "tag": "0002_third_rage",
+      "breakpoints": true
     }
   ]
 }

@@ -1,26 +1,61 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
+import {
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
+
+import { CategoriesRepository } from "./categories.repository";
+import { CreateCategoryDto } from "./dto/create-category.dto";
+import { UpdateCategoryDto } from "./dto/update-category.dto";
 
 @Injectable()
 export class CategoriesService {
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+  constructor(
+    private readonly categoriesRepository: CategoriesRepository,
+  ) {}
+
+  async create(createCategoryDto: CreateCategoryDto) {
+    return await this.categoriesRepository.create(
+      createCategoryDto,
+    );
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  async findAll() {
+    return await this.categoriesRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: string) {
+    const category =
+      await this.categoriesRepository.findOne(id);
+
+    if (!category) {
+      throw new NotFoundException(
+        "Categoría no encontrada.",
+      );
+    }
+
+    return category;
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(
+    id: string,
+    updateCategoryDto: UpdateCategoryDto,
+  ) {
+    const category =
+      await this.categoriesRepository.findOne(id);
+
+    if (!category) {
+      throw new NotFoundException(
+        "Categoría no encontrada.",
+      );
+    }
+
+    return await this.categoriesRepository.update(
+      id,
+      updateCategoryDto,
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: string) {
+    return await this.categoriesRepository.remove(id);
   }
 }
