@@ -16,7 +16,7 @@ export class CategoriesRepository {
   console.log("========== CREATE ==========");
   console.log("DTO:", createCategoryDto);
 
-  const result = await this.database.client
+  const result = await this.database.client 
     .insert(categories)
     .values({
       companyId: createCategoryDto.companyId,
@@ -35,7 +35,8 @@ export class CategoriesRepository {
   async findAll() {
     return await this.database.client
       .select()
-      .from(categories);
+      .from(categories)
+      .where(eq(categories.isActive, true));
   }
 
   async findOne(id: string) {
@@ -71,6 +72,16 @@ export class CategoriesRepository {
 }
 
   async remove(id: string) {
-    return { id };
+  const result = await this.database.client
+    .update(categories)
+    .set({
+      isActive: false,
+      deletedAt: new Date(),
+      updatedAt: new Date(),
+    })
+    .where(eq(categories.id, id))
+    .returning();
+
+    return result[0] ?? null;
   }
 }
