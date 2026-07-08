@@ -2,11 +2,13 @@ import { ApiResponse } from "./api-response";
 import { PaginationMeta } from "./pagination-meta";
 
 export class ResponseFactory {
-  private static build<T>(
+
+  private static response<T>(
     data: T,
     message: string,
     meta?: PaginationMeta,
   ): ApiResponse<T> {
+
     return {
       success: true,
       message,
@@ -14,41 +16,46 @@ export class ResponseFactory {
       data,
       meta,
     };
+
   }
 
-  static ok<T>(
-    data: T,
-    message = "Operación realizada correctamente.",
-  ): ApiResponse<T> {
-    return this.build(data, message);
+  static ok<T>(data: T) {
+    return this.response(
+      data,
+      "Operación realizada correctamente.",
+    );
   }
 
-  static created<T>(
-    data: T,
-    message = "Registro creado correctamente.",
-  ): ApiResponse<T> {
-    return this.build(data, message);
+  static created<T>(data: T) {
+    return this.response(
+      data,
+      "Registro creado correctamente.",
+    );
   }
 
-  static updated<T>(
-    data: T,
-    message = "Registro actualizado correctamente.",
-  ): ApiResponse<T> {
-    return this.build(data, message);
+  static updated<T>(data: T) {
+    return this.response(
+      data,
+      "Registro actualizado correctamente.",
+    );
   }
 
-  static deleted<T>(
-    data: T,
-    message = "Registro eliminado correctamente.",
-  ): ApiResponse<T> {
-    return this.build(data, message);
+  static deleted<T>(data: T) {
+    return this.response(
+      data,
+      "Registro eliminado correctamente.",
+    );
   }
 
   static paginated<T>(
     data: T,
     meta: PaginationMeta,
-    message = "Operación realizada correctamente.",
-  ): ApiResponse<T> {
-    return this.build(data, message, meta);
+  ) {
+    return this.response(
+      data,
+      "Operación realizada correctamente.",
+      meta,
+    );
   }
+
 }
