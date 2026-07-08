@@ -6,11 +6,12 @@ import databaseConfig from "./config/database.config";
 
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { DatabaseModule } from './database/database.module';
-import { ProductsService } from './products/products.service';
-import { CategoriesModule } from './categories/categories.module';
+
+import { AuthModule } from "./platform/auth/auth.module";
+import { UsersModule } from "./platform/users/users.module";
+
+import { DatabaseModule } from "./database/database.module";
+import { CategoriesModule } from "./categories/categories.module";
 
 @Module({
   imports: [

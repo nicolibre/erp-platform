@@ -1,11 +1,8 @@
-// common-columns.ts
-
-import { auditColumns } from "./audit-columns";
-import { tenantColumns } from "./tenant-columns";
-import { softDeleteColumns } from "./soft-delete-columns";
+import { sql } from "drizzle-orm";
+import { uuid } from "drizzle-orm/pg-core";
 
 export const commonColumns = {
-  ...tenantColumns,
-  ...softDeleteColumns,
-  ...auditColumns,
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
 };

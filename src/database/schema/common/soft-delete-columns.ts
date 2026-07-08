@@ -9,7 +9,10 @@ export const softDeleteColumns = {
     .default(true)
     .notNull(),
 
-  deletedAt: timestamp("deleted_at"),
+  deletedAt: timestamp("deleted_at", {
+    withTimezone: true,
+    precision: 3,
+  }),
 
   deletedBy: uuid("deleted_by"),
 };

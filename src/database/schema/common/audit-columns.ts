@@ -1,16 +1,19 @@
-import {
-  timestamp,
-  uuid,
-} from "drizzle-orm/pg-core";
+import { timestamp, uuid } from "drizzle-orm/pg-core";
 
 export const auditColumns = {
-  createdAt: timestamp("created_at")
+  createdAt: timestamp("created_at", {
+    withTimezone: true,
+    precision: 3,
+  })
     .defaultNow()
     .notNull(),
 
   createdBy: uuid("created_by"),
 
-  updatedAt: timestamp("updated_at")
+  updatedAt: timestamp("updated_at", {
+    withTimezone: true,
+    precision: 3,
+  })
     .defaultNow()
     .notNull(),
 

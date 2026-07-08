@@ -1,15 +1,16 @@
-import { varchar } from "drizzle-orm/pg-core";
+import {
+  text,
+  varchar,
+} from "drizzle-orm/pg-core";
 
 export const namedEntityColumns = {
   code: varchar("code", {
-    length: 30,
+    length: 20,
   }).notNull(),
 
   name: varchar("name", {
     length: 150,
   }).notNull(),
 
-  description: varchar("description", {
-    length: 500,
-  }),
+  description: text("description"),
 };

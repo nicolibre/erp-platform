@@ -4,5 +4,7 @@ import { companies } from "../companies";
 export const tenantColumns = {
   companyId: uuid("company_id")
     .notNull()
-    .references(() => companies.id),
+    .references(() => companies.id, {
+      onDelete: "restrict",
+    }),
 };
