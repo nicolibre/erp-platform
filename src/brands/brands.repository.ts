@@ -1,6 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { count, eq } from "drizzle-orm";
 
+import { BaseRepository } from "../core/base";
+import type { IRepository } from "../core/interfaces";
+
 import { DatabaseService } from "../database/database.service";
 import { brands } from "../database/schema";
 
@@ -8,14 +11,21 @@ import { CreateBrandDto } from "./dto/create-brand.dto";
 import { UpdateBrandDto } from "./dto/update-brand.dto";
 
 @Injectable()
-export class BrandsRepository {
-  constructor(
-    private readonly database: DatabaseService,
-  ) {}
+export class BrandsRepository
+  extends BaseRepository<typeof brands>
+  implements IRepository<
+    typeof brands.$inferSelect,
+    CreateBrandDto,
+    UpdateBrandDto
+  >
+{
+  constructor(database: DatabaseService) {
+    super(database, brands);
+  }
 
   async create(createBrandDto: CreateBrandDto) {
-    const result = await this.database.client
-      .insert(brands)
+    const result = await this.client
+      .insert(this.table)
       .values({
         companyId: createBrandDto.companyId,
         code: createBrandDto.code,
@@ -28,24 +38,27 @@ export class BrandsRepository {
   }
 
   findAll() {
-    return this.database.client
+    return this.client
       .select()
-      .from(brands)
+      .from(this.table)
       .where(eq(brands.isActive, true));
   }
 
   async findById(id: string) {
-    const result = await this.database.client
+    const result = await this.client
       .select()
-      .from(brands)
+      .from(this.table)
       .where(eq(brands.id, id));
 
     return result[0] ?? null;
   }
 
-  async update(id: string, updateBrandDto: UpdateBrandDto) {
-    const result = await this.database.client
-      .update(brands)
+  async update(
+    id: string,
+    updateBrandDto: UpdateBrandDto,
+  ) {
+    const result = await this.client
+      .update(this.table)
       .set({
         ...updateBrandDto,
         updatedAt: new Date(),
@@ -57,8 +70,8 @@ export class BrandsRepository {
   }
 
   async softDelete(id: string) {
-    const result = await this.database.client
-      .update(brands)
+    const result = await this.client
+      .update(this.table)
       .set({
         isActive: false,
         deletedAt: new Date(),
@@ -75,11 +88,11 @@ export class BrandsRepository {
   }
 
   async count(): Promise<number> {
-    const result = await this.database.client
+    const result = await this.client
       .select({
         total: count(),
       })
-      .from(brands)
+      .from(this.table)
       .where(eq(brands.isActive, true));
 
     return Number(result[0].total);

@@ -24,6 +24,7 @@ import { BrandsModule } from "./brands/brands.module";
 
   AuthModule,
   UsersModule,
+
   DatabaseModule,
 
   CategoriesModule,

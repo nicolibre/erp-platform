@@ -12,16 +12,15 @@ export class CreateBrandDto {
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(30)
+  @MaxLength(20)
   code: string;
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(100)
+  @MaxLength(150)
   name: string;
 
   @IsOptional()
   @IsString()
-  @MaxLength(255)
   description?: string;
 }
