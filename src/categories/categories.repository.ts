@@ -1,87 +1,100 @@
 import { Injectable } from "@nestjs/common";
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
+
+import { BaseRepository } from "../core/base";
+import type { IRepository } from "../core/interfaces";
 
 import { DatabaseService } from "../database/database.service";
 import { categories } from "../database/schema";
+
 import { CreateCategoryDto } from "./dto/create-category.dto";
 import { UpdateCategoryDto } from "./dto/update-category.dto";
 
 @Injectable()
-export class CategoriesRepository {
-  constructor(
-    private readonly database: DatabaseService,
-  ) {}
+export class CategoriesRepository
+  extends BaseRepository<typeof categories>
+  implements IRepository<
+    typeof categories.$inferSelect,
+    CreateCategoryDto,
+    UpdateCategoryDto
+  >
+{
+  constructor(database: DatabaseService) {
+    super(database, categories);
+  }
 
   async create(createCategoryDto: CreateCategoryDto) {
-  console.log("========== CREATE ==========");
-  console.log("DTO:", createCategoryDto);
-
-  const result = await this.database.client 
-    .insert(categories)
-    .values({
-      companyId: createCategoryDto.companyId,
-      code: createCategoryDto.code,
-      name: createCategoryDto.name,
-      description: createCategoryDto.description,
-    })
-    .returning();
-
-    console.log("INSERT RESULT:", result);
-    console.log("============================");
+    const result = await this.client
+      .insert(this.table)
+      .values({
+        companyId: createCategoryDto.companyId,
+        code: createCategoryDto.code,
+        name: createCategoryDto.name,
+        description: createCategoryDto.description,
+      })
+      .returning();
 
     return result[0];
   }
 
-  async findAll() {
-    return await this.database.client
+  findAll() {
+    return this.client
       .select()
-      .from(categories)
+      .from(this.table)
       .where(eq(categories.isActive, true));
   }
 
-  async findOne(id: string) {
-    const result = await this.database.client
+  async findById(id: string) {
+    const result = await this.client
       .select()
-      .from(categories)
+      .from(this.table)
       .where(eq(categories.id, id));
 
     return result[0] ?? null;
   }
 
   async update(
-  id: string,
-  updateCategoryDto: UpdateCategoryDto,
-    ) {
-    console.log("===== UPDATE =====");
-    console.log("ID:", id);
-    console.log("DTO:", updateCategoryDto);
-
-    const result = await this.database.client
-    .update(categories)
-    .set({
-      ...updateCategoryDto,
-      updatedAt: new Date(),
-    })
-    .where(eq(categories.id, id))
-    .returning();
-
-  console.log("RESULT:", result);
-  console.log("==================");
-
-  return result[0] ?? null;
-}
-
-  async remove(id: string) {
-  const result = await this.database.client
-    .update(categories)
-    .set({
-      isActive: false,
-      deletedAt: new Date(),
-      updatedAt: new Date(),
-    })
-    .where(eq(categories.id, id))
-    .returning();
+    id: string,
+    updateCategoryDto: UpdateCategoryDto,
+  ) {
+    const result = await this.client
+      .update(this.table)
+      .set({
+        ...updateCategoryDto,
+        updatedAt: new Date(),
+      })
+      .where(eq(categories.id, id))
+      .returning();
 
     return result[0] ?? null;
+  }
+
+  async softDelete(id: string) {
+    const result = await this.client
+      .update(this.table)
+      .set({
+        isActive: false,
+        deletedAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .where(eq(categories.id, id))
+      .returning();
+
+    return result[0] ?? null;
+  }
+
+  async exists(id: string): Promise<boolean> {
+    return (await this.findById(id)) !== null;
+  }
+
+  async count(): Promise<number> {
+    const result = await this.client
+      .select({
+        total: count(),
+      })
+      .from(this.table)
+      .where(eq(categories.isActive, true));
+
+    return Number(result[0].total);
   }
 }

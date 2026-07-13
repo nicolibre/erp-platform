@@ -22,6 +22,20 @@
       "when": 1783037267250,
       "tag": "0002_third_rage",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1783907335687,
+      "tag": "0003_massive_tiger_shark",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1783957609000,
+      "tag": "0004_noisy_ogun",
+      "breakpoints": true
     }
   ]
 }

@@ -1,14 +1,14 @@
+import { Messages } from "../constants";
+
 import { ApiResponse } from "./api-response";
 import { PaginationMeta } from "./pagination-meta";
 
 export class ResponseFactory {
-
-  private static response<T>(
+  private static build<T>(
     data: T,
     message: string,
     meta?: PaginationMeta,
   ): ApiResponse<T> {
-
     return {
       success: true,
       message,
@@ -16,46 +16,44 @@ export class ResponseFactory {
       data,
       meta,
     };
-
   }
 
-  static ok<T>(data: T) {
-    return this.response(
+  static ok<T>(data: T): ApiResponse<T> {
+    return this.build(
       data,
-      "Operación realizada correctamente.",
+      Messages.FOUND,
     );
   }
 
-  static created<T>(data: T) {
-    return this.response(
+  static created<T>(data: T): ApiResponse<T> {
+    return this.build(
       data,
-      "Registro creado correctamente.",
+      Messages.CREATED,
     );
   }
 
-  static updated<T>(data: T) {
-    return this.response(
+  static updated<T>(data: T): ApiResponse<T> {
+    return this.build(
       data,
-      "Registro actualizado correctamente.",
+      Messages.UPDATED,
     );
   }
 
-  static deleted<T>(data: T) {
-    return this.response(
+  static deleted<T>(data: T): ApiResponse<T> {
+    return this.build(
       data,
-      "Registro eliminado correctamente.",
+      Messages.DELETED,
     );
   }
 
   static paginated<T>(
     data: T,
     meta: PaginationMeta,
-  ) {
-    return this.response(
+  ): ApiResponse<T> {
+    return this.build(
       data,
-      "Operación realizada correctamente.",
+      Messages.FOUND,
       meta,
     );
   }
-
 }
