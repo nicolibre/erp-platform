@@ -1,8 +1,7 @@
 import { Injectable } from "@nestjs/common";
 
-import { BaseService } from "../core/base";
-
-import { brands } from "../database/schema";
+import { BaseService } from "../../core/base";
+import { brands } from "../../database/schema";
 
 import { BrandsRepository } from "./brands.repository";
 import { CreateBrandDto } from "./dto/create-brand.dto";

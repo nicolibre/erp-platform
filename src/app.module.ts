@@ -1,34 +1,34 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 
-import appConfig from "./config/app.config";
-import databaseConfig from "./config/database.config";
-
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 
-import { AuthModule } from "./platform/auth/auth.module";
-import { UsersModule } from "./platform/users/users.module";
+import appConfig from "./config/app.config";
+import databaseConfig from "./config/database.config";
 
 import { DatabaseModule } from "./database/database.module";
-import { CategoriesModule } from "./categories/categories.module";
 
-import { BrandsModule } from "./brands/brands.module";
+import { AuthModule } from "./platform/security/auth/auth.module";
+import { UsersModule } from "./platform/security/users/users.module";
+
+import { CategoriesModule } from "./masters/categories/categories.module";
+import { BrandsModule } from "./masters/brands/brands.module";
 
 @Module({
   imports: [
-  ConfigModule.forRoot({
-    isGlobal: true,
-    load: [appConfig, databaseConfig],
-  }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [appConfig, databaseConfig],
+    }),
 
-  AuthModule,
-  UsersModule,
+    DatabaseModule,
 
-  DatabaseModule,
+    AuthModule,
+    UsersModule,
 
-  CategoriesModule,
-  BrandsModule,
+    CategoriesModule,
+    BrandsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
