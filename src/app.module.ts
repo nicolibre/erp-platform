@@ -15,6 +15,8 @@ import { UsersModule } from "./platform/security/users/users.module";
 import { CategoriesModule } from "./masters/categories/categories.module";
 import { BrandsModule } from "./masters/brands/brands.module";
 
+import { UnitsModule } from "./masters/units/units.module";
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -29,6 +31,7 @@ import { BrandsModule } from "./masters/brands/brands.module";
 
     CategoriesModule,
     BrandsModule,
+    UnitsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
